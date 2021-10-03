@@ -13,8 +13,13 @@ export class TasksService {
        private taskRepository: Repository<Task>
    ) {}
 
-
-
+   async getTasks(): Promise<Task[]> {
+   const result = await this.taskRepository.find();
+   if(result.length == 0) {
+    throw new NotFoundException('No tasks for the moment');
+   }
+   return result;
+   }
    async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
        const task = new Task();
        task.title = createTaskDto.title;
@@ -33,7 +38,7 @@ export class TasksService {
        return found;
    }
 
-   async updateTaskStatus(id: number, status: TaskStatus) {
+   async updateTaskStatus(id: number, status: TaskStatus): Promise<Task> {
        const task = await this.getTaskById(id);
        task.status = status;
        await task.save()
