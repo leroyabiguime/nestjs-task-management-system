@@ -5,12 +5,13 @@ import { Repository } from 'typeorm';
 import { Task } from './task.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { TaskStatus } from './task-status.enum';
+import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 
 @Injectable()
 export class TasksService {
    constructor(
        @InjectRepository(TaskRepository)
-       private taskRepository: Repository<Task>
+       private taskRepository: TaskRepository
    ) {}
 
    async getTasks(): Promise<Task[]> {
@@ -20,10 +21,15 @@ export class TasksService {
    }
    return result;
    }
+
+   async getTasksSearch(filterDto: GetTasksFilterDto): Promise<Task[]>{
+       return this.taskRepository.getTasks(filterDto);
+   }
+
    async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
        const task = new Task();
        task.title = createTaskDto.title;
-       task.description = task.description;
+       task.description = createTaskDto.description;
        task.status = TaskStatus.OPEN;
        await task.save();
        return task;

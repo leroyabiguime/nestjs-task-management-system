@@ -8,7 +8,7 @@ import { TasksModule } from './tasks/tasks.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeOrmConfig),
-    TasksModule
+    TasksModule,
   ],
   controllers: [AppController],
   providers: [AppService],
