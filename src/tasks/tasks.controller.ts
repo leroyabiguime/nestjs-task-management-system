@@ -1,4 +1,6 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, UsePipes, ValidationPipe, Delete, Patch } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, UsePipes, ValidationPipe, Delete, Patch, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UpdateDateColumn } from 'typeorm';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { TaskStatusValidationPipe } from './pipes/task-status-validation.pipe';
@@ -6,6 +8,9 @@ import { TaskStatus } from './task-status.enum';
 import { Task } from './task.entity';
 import { TasksService } from './tasks.service';
 
+
+@ApiTags('Tasks')
+@UseGuards(AuthGuard('jwt'))
 @Controller('tasks')
 export class TasksController {
     constructor(private tasksService: TasksService){}
